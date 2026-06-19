@@ -7,7 +7,7 @@ import {
 import { 
   Activity, AlertTriangle, ArrowRight, BarChart3, Bot, Box, CheckCircle2, ChevronRight, 
   DollarSign, Download, Eye, FileText, Globe, Key, Leaf, LogIn, Map, RefreshCw, 
-  Search, ShieldAlert, ShoppingCart, Truck, Users, Warehouse 
+  Search, ShieldAlert, ShoppingCart, Truck, Users, Warehouse, Menu, X 
 } from 'lucide-react';
 import { api } from '../lib/api';
 
@@ -16,6 +16,7 @@ const COLORS = ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#06B6D4'
 export default function Dashboard() {
   // Navigation & UI States
   const [activeTab, setActiveTab] = useState('overview');
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [notifications, setNotifications] = useState<any[]>([]);
   const [userRole, setUserRole] = useState('ANALYST');
@@ -352,19 +353,39 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="flex h-screen overflow-hidden bg-[#0A0F1D] text-slate-200">
+    <div className="flex h-screen overflow-hidden bg-[#0A0F1D] text-slate-200 relative">
       
+      {/* BACKDROP OVERLAY FOR MOBILE */}
+      {isSidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden transition-opacity duration-300"
+          onClick={() => setIsSidebarOpen(false)}
+        />
+      )}
+
       {/* SIDEBAR NAVIGATION */}
-      <aside className="w-64 bg-[#111827] border-r border-[#1F2937] flex flex-col justify-between z-10">
+      <aside className={`w-64 bg-[#111827] border-r border-[#1F2937] flex flex-col justify-between z-50 fixed inset-y-0 left-0 transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:h-screen lg:flex lg:flex-shrink-0 ${
+        isSidebarOpen ? 'translate-x-0 shadow-2xl shadow-blue-500/10' : '-translate-x-full'
+      }`}>
         <div className="p-5 flex flex-col gap-6 overflow-y-auto">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-blue-600 rounded-lg text-white font-bold text-lg shadow-lg shadow-blue-500/30">
-              SX
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-blue-600 rounded-lg text-white font-bold text-lg shadow-lg shadow-blue-500/30">
+                SX
+              </div>
+              <div>
+                <h1 className="font-bold text-lg tracking-tight text-white glow-text">SupplyChainX</h1>
+                <p className="text-[10px] text-blue-400 font-mono tracking-widest uppercase">Autonomous AI Platform</p>
+              </div>
             </div>
-            <div>
-              <h1 className="font-bold text-lg tracking-tight text-white glow-text">SupplyChainX</h1>
-              <p className="text-[10px] text-blue-400 font-mono tracking-widest uppercase">Autonomous AI Platform</p>
-            </div>
+            {/* Mobile drawer close button */}
+            <button 
+              onClick={() => setIsSidebarOpen(false)}
+              className="p-1.5 text-slate-400 hover:text-white lg:hidden border border-slate-700/50 hover:bg-slate-800 rounded-lg transition"
+              title="Close Menu"
+            >
+              <X className="w-4 h-4" />
+            </button>
           </div>
 
           <div className="px-3 py-2 bg-slate-800/50 rounded-lg border border-slate-700/30">
@@ -379,7 +400,7 @@ export default function Dashboard() {
 
           <nav className="flex flex-col gap-1.5">
             <button 
-              onClick={() => setActiveTab('overview')} 
+              onClick={() => { setActiveTab('overview'); setIsSidebarOpen(false); }} 
               className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all ${
                 activeTab === 'overview' ? 'bg-blue-600 text-white font-medium shadow-md shadow-blue-500/20' : 'text-slate-400 hover:bg-slate-800 hover:text-white'
               }`}
@@ -387,7 +408,7 @@ export default function Dashboard() {
               <Activity className="w-4.5 h-4.5" /> Dashboard Overview
             </button>
             <button 
-              onClick={() => setActiveTab('inventory')} 
+              onClick={() => { setActiveTab('inventory'); setIsSidebarOpen(false); }} 
               className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all ${
                 activeTab === 'inventory' ? 'bg-blue-600 text-white font-medium shadow-md shadow-blue-500/20' : 'text-slate-400 hover:bg-slate-800 hover:text-white'
               }`}
@@ -395,7 +416,7 @@ export default function Dashboard() {
               <Box className="w-4.5 h-4.5" /> Inventory Doctor
             </button>
             <button 
-              onClick={() => setActiveTab('forecasting')} 
+              onClick={() => { setActiveTab('forecasting'); setIsSidebarOpen(false); }} 
               className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all ${
                 activeTab === 'forecasting' ? 'bg-blue-600 text-white font-medium shadow-md shadow-blue-500/20' : 'text-slate-400 hover:bg-slate-800 hover:text-white'
               }`}
@@ -403,7 +424,7 @@ export default function Dashboard() {
               <BarChart3 className="w-4.5 h-4.5" /> Demand Forecasting
             </button>
             <button 
-              onClick={() => setActiveTab('suppliers')} 
+              onClick={() => { setActiveTab('suppliers'); setIsSidebarOpen(false); }} 
               className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all ${
                 activeTab === 'suppliers' ? 'bg-blue-600 text-white font-medium shadow-md shadow-blue-500/20' : 'text-slate-400 hover:bg-slate-800 hover:text-white'
               }`}
@@ -411,7 +432,7 @@ export default function Dashboard() {
               <Users className="w-4.5 h-4.5" /> Supplier Intelligence
             </button>
             <button 
-              onClick={() => setActiveTab('risks')} 
+              onClick={() => { setActiveTab('risks'); setIsSidebarOpen(false); }} 
               className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all ${
                 activeTab === 'risks' ? 'bg-blue-600 text-white font-medium shadow-md shadow-blue-500/20' : 'text-slate-400 hover:bg-slate-800 hover:text-white'
               }`}
@@ -419,7 +440,7 @@ export default function Dashboard() {
               <ShieldAlert className="w-4.5 h-4.5" /> Risk Radar
             </button>
             <button 
-              onClick={() => setActiveTab('routing')} 
+              onClick={() => { setActiveTab('routing'); setIsSidebarOpen(false); }} 
               className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all ${
                 activeTab === 'routing' ? 'bg-blue-600 text-white font-medium shadow-md shadow-blue-500/20' : 'text-slate-400 hover:bg-slate-800 hover:text-white'
               }`}
@@ -427,7 +448,7 @@ export default function Dashboard() {
               <Map className="w-4.5 h-4.5" /> Route Optimizer
             </button>
             <button 
-              onClick={() => setActiveTab('digital-twin')} 
+              onClick={() => { setActiveTab('digital-twin'); setIsSidebarOpen(false); }} 
               className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all ${
                 activeTab === 'digital-twin' ? 'bg-blue-600 text-white font-medium shadow-md shadow-blue-500/20' : 'text-slate-400 hover:bg-slate-800 hover:text-white'
               }`}
@@ -435,7 +456,7 @@ export default function Dashboard() {
               <Globe className="w-4.5 h-4.5" /> Digital Twin Simulator
             </button>
             <button 
-              onClick={() => setActiveTab('traceability')} 
+              onClick={() => { setActiveTab('traceability'); setIsSidebarOpen(false); }} 
               className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all ${
                 activeTab === 'traceability' ? 'bg-blue-600 text-white font-medium shadow-md shadow-blue-500/20' : 'text-slate-400 hover:bg-slate-800 hover:text-white'
               }`}
@@ -443,7 +464,7 @@ export default function Dashboard() {
               <RefreshCw className="w-4.5 h-4.5" /> Traceability System
             </button>
             <button 
-              onClick={() => setActiveTab('green')} 
+              onClick={() => { setActiveTab('green'); setIsSidebarOpen(false); }} 
               className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all ${
                 activeTab === 'green' ? 'bg-blue-600 text-white font-medium shadow-md shadow-blue-500/20' : 'text-slate-400 hover:bg-slate-800 hover:text-white'
               }`}
@@ -451,7 +472,7 @@ export default function Dashboard() {
               <Leaf className="w-4.5 h-4.5" /> Green Supply Chain
             </button>
             <button 
-              onClick={() => setActiveTab('copilot')} 
+              onClick={() => { setActiveTab('copilot'); setIsSidebarOpen(false); }} 
               className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all ${
                 activeTab === 'copilot' ? 'bg-blue-600 text-white font-medium shadow-md shadow-blue-500/20' : 'text-slate-400 hover:bg-slate-800 hover:text-white'
               }`}
@@ -469,7 +490,7 @@ export default function Dashboard() {
                 Logged as <span className="text-white font-medium">{userName}</span>
               </div>
               <button 
-                onClick={handleLogout}
+                onClick={() => { handleLogout(); setIsSidebarOpen(false); }}
                 className="w-full text-center text-xs py-2 bg-slate-800 hover:bg-red-950 text-red-400 hover:text-red-200 border border-slate-700/50 rounded-lg transition"
               >
                 Sign Out
@@ -477,7 +498,7 @@ export default function Dashboard() {
             </div>
           ) : (
             <button 
-              onClick={() => setActiveTab('auth')}
+              onClick={() => { setActiveTab('auth'); setIsSidebarOpen(false); }}
               className="w-full text-center text-xs py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition"
             >
               Access Portal (Sign In)
@@ -490,9 +511,16 @@ export default function Dashboard() {
       <main className="flex-1 flex flex-col overflow-hidden">
         
         {/* HEADER */}
-        <header className="h-16 border-b border-[#1F2937] bg-[#111827] flex items-center justify-between px-8 z-10">
-          <div className="flex items-center gap-4">
-            <h2 className="font-semibold text-lg text-white">
+        <header className="h-16 border-b border-[#1F2937] bg-[#111827] flex items-center justify-between px-4 sm:px-8 z-10 flex-shrink-0">
+          <div className="flex items-center gap-3 min-w-0">
+            <button 
+              onClick={() => setIsSidebarOpen(true)}
+              className="p-2 -ml-2 text-slate-400 hover:text-white lg:hidden flex-shrink-0"
+              title="Open Navigation Menu"
+            >
+              <Menu className="w-5 h-5" />
+            </button>
+            <h2 className="font-semibold text-sm sm:text-base md:text-lg text-white truncate min-w-0">
               {activeTab === 'overview' && 'Executive Operations Control Room'}
               {activeTab === 'inventory' && 'Smart Inventory Doctor Diagnostics'}
               {activeTab === 'forecasting' && 'AI Demand forecasting & Trends'}
@@ -505,10 +533,10 @@ export default function Dashboard() {
               {activeTab === 'copilot' && 'AI SupplyChainX Copilot Workspace'}
               {activeTab === 'auth' && 'Authentication Gateway'}
             </h2>
-            {loading && <RefreshCw className="w-4 h-4 text-blue-400 animate-spin" />}
+            {loading && <RefreshCw className="w-4 h-4 text-blue-400 animate-spin flex-shrink-0" />}
           </div>
 
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-4 sm:gap-6 flex-shrink-0">
             {/* Quick Stats */}
             {kpis && (
               <div className="hidden lg:flex items-center gap-4 text-xs font-mono border-l border-slate-700 pl-4">
@@ -546,7 +574,7 @@ export default function Dashboard() {
         </header>
 
         {/* WORKSPACE PAGES */}
-        <div className="flex-1 overflow-y-auto p-8">
+        <div className="flex-1 overflow-y-auto p-4 sm:p-6 md:p-8">
           
           {/* TAB 1: OVERVIEW */}
           {activeTab === 'overview' && (
@@ -774,8 +802,8 @@ export default function Dashboard() {
                 {/* Form 1: Add Product */}
                 <div className="glass-panel p-6 rounded-xl flex flex-col gap-4">
                   <h4 className="font-semibold text-white border-b border-slate-700/40 pb-2">Add New Enterprise Product</h4>
-                  <form onSubmit={handleAddProduct} className="grid grid-cols-2 gap-4 text-xs">
-                    <div className="col-span-2">
+                  <form onSubmit={handleAddProduct} className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                    <div className="sm:col-span-2">
                       <label className="text-slate-400 block mb-1">Product Name</label>
                       <input 
                         type="text" value={newProduct.name} onChange={e => setNewProduct({...newProduct, name: e.target.value})}
@@ -815,14 +843,14 @@ export default function Dashboard() {
                         className="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 text-white focus:border-blue-500 outline-none" required
                       />
                     </div>
-                    <div className="col-span-2">
+                    <div className="sm:col-span-2">
                       <label className="text-slate-400 block mb-1">Reorder Point Trigger</label>
                       <input 
                         type="number" value={newProduct.reorderPoint} onChange={e => setNewProduct({...newProduct, reorderPoint: e.target.value})}
                         className="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 text-white focus:border-blue-500 outline-none" required
                       />
                     </div>
-                    <button type="submit" className="col-span-2 py-2.5 bg-blue-600 hover:bg-blue-700 font-semibold rounded text-white transition mt-2">
+                    <button type="submit" className="sm:col-span-2 py-2.5 bg-blue-600 hover:bg-blue-700 font-semibold rounded text-white transition mt-2">
                       Create Product Record
                     </button>
                   </form>
@@ -831,7 +859,7 @@ export default function Dashboard() {
                 {/* Form 2: Update Warehouse Inventory stock level */}
                 <div className="glass-panel p-6 rounded-xl flex flex-col gap-4">
                   <h4 className="font-semibold text-white border-b border-slate-700/40 pb-2">Log Multi-Warehouse Inventory Stock Entry</h4>
-                  <form onSubmit={handleUpdateStock} className="grid grid-cols-2 gap-4 text-xs">
+                  <form onSubmit={handleUpdateStock} className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
                     <div>
                       <label className="text-slate-400 block mb-1">Select Product</label>
                       <select 
@@ -873,14 +901,14 @@ export default function Dashboard() {
                         className="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 text-white focus:border-blue-500 outline-none" placeholder="e.g. BATCH-A4"
                       />
                     </div>
-                    <div className="col-span-2">
+                    <div className="sm:col-span-2">
                       <label className="text-slate-400 block mb-1">Expiry Date (If applicable)</label>
                       <input 
                         type="date" value={stockUpdate.expiryDate} onChange={e => setStockUpdate({...stockUpdate, expiryDate: e.target.value})}
                         className="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 text-white focus:border-blue-500 outline-none"
                       />
                     </div>
-                    <button type="submit" className="col-span-2 py-2.5 bg-blue-600 hover:bg-blue-700 font-semibold rounded text-white transition mt-2">
+                    <button type="submit" className="sm:col-span-2 py-2.5 bg-blue-600 hover:bg-blue-700 font-semibold rounded text-white transition mt-2">
                       Commit Inventory Updates
                     </button>
                   </form>
@@ -898,7 +926,7 @@ export default function Dashboard() {
                 {docDiagnostics ? (
                   <div className="flex flex-col gap-6">
                     {/* Diagnosis stats cards */}
-                    <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
                       <div className="p-3 bg-slate-800/40 rounded border border-slate-700/50">
                         <span className="text-[10px] text-slate-400 block">Total Checked</span>
                         <span className="text-xl font-bold text-white font-mono">{docDiagnostics.summary.total_products_checked}</span>
@@ -915,7 +943,7 @@ export default function Dashboard() {
                         <span className="text-[10px] text-red-400 block">Dead Stock items</span>
                         <span className="text-xl font-bold text-red-400 font-mono">{docDiagnostics.summary.dead_stock_count}</span>
                       </div>
-                      <div className="p-3 bg-emerald-950/20 rounded border border-emerald-900/30">
+                      <div className="p-3 bg-emerald-950/20 rounded border border-emerald-900/30 sm:col-span-2 lg:col-span-1">
                         <span className="text-[10px] text-emerald-400 block">Holding Cost / Savings</span>
                         <span className="text-sm font-bold text-emerald-400 font-mono">${docDiagnostics.summary.monthly_holding_cost_usd} / Save ${docDiagnostics.summary.estimated_monthly_savings_usd}</span>
                       </div>
@@ -926,7 +954,7 @@ export default function Dashboard() {
                       {docDiagnostics.diagnoses.map((d: any, idx: number) => (
                         <div key={idx} className="p-4 bg-slate-800/30 border border-slate-700/30 rounded-lg flex flex-col md:flex-row justify-between md:items-center gap-4">
                           <div>
-                            <div className="flex items-center gap-2">
+                            <div className="flex flex-wrap items-center gap-2">
                               <span className="font-semibold text-white">{d.name}</span>
                               <span className="text-[10px] font-mono text-slate-500">SKU: {d.sku}</span>
                               <span className={`px-2 py-0.5 rounded text-[9px] font-bold ${
@@ -1065,8 +1093,8 @@ export default function Dashboard() {
                 {/* Form to add Supplier */}
                 <div className="glass-panel p-6 rounded-xl flex flex-col gap-4">
                   <h4 className="font-semibold text-white border-b border-slate-700/40 pb-2">Register Supplier Hub</h4>
-                  <form onSubmit={handleAddSupplier} className="grid grid-cols-2 gap-4 text-xs">
-                    <div className="col-span-2">
+                  <form onSubmit={handleAddSupplier} className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                    <div className="sm:col-span-2">
                       <label className="text-slate-400 block mb-1">Company Name</label>
                       <input 
                         type="text" value={newSupplier.name} onChange={e => setNewSupplier({...newSupplier, name: e.target.value})}
@@ -1101,7 +1129,7 @@ export default function Dashboard() {
                         className="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 text-white focus:border-blue-500 outline-none" required
                       />
                     </div>
-                    <button type="submit" className="col-span-2 py-2.5 bg-blue-600 hover:bg-blue-700 font-semibold rounded text-white transition mt-2">
+                    <button type="submit" className="sm:col-span-2 py-2.5 bg-blue-600 hover:bg-blue-700 font-semibold rounded text-white transition mt-2">
                       Register Supplier
                     </button>
                   </form>
@@ -1373,7 +1401,7 @@ export default function Dashboard() {
                   <p className="text-xs text-slate-400">Trigger extreme downstream stress events and model supply buffers</p>
                 </div>
 
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-2">
                   <button 
                     onClick={() => handleSimulateTwin('supplier_unavailable')}
                     className={`p-3 rounded-lg border text-xs text-left font-medium transition ${
@@ -1524,7 +1552,7 @@ export default function Dashboard() {
                           {idx + 1}
                         </div>
                         <div>
-                          <div className="flex items-center gap-2">
+                          <div className="flex flex-wrap items-center gap-2">
                             <h5 className="text-sm font-semibold text-white">{stage.stage} Stage</h5>
                             <span className="text-[10px] font-mono text-slate-500">Location: {stage.location}</span>
                             <span className={`px-2 py-0.2 rounded text-[8px] font-bold ${
@@ -1657,7 +1685,7 @@ export default function Dashboard() {
 
           {/* TAB 10: COPILOT CHAT */}
           {activeTab === 'copilot' && (
-            <div className="flex flex-col h-[calc(100vh-12rem)]">
+            <div className="flex flex-col h-[calc(100vh-10rem)] sm:h-[calc(100vh-12rem)]">
               
               {/* Chat panel */}
               <div className="flex-1 glass-panel rounded-xl overflow-hidden flex flex-col">
@@ -1670,9 +1698,9 @@ export default function Dashboard() {
                 </div>
 
                 {/* Message Log */}
-                <div className="flex-1 overflow-y-auto p-6 flex flex-col gap-4">
+                <div className="flex-1 overflow-y-auto p-3 sm:p-6 flex flex-col gap-4">
                   {chatLog.map((chat, idx) => (
-                    <div key={idx} className={`flex gap-3 max-w-[80%] ${chat.role === 'user' ? 'self-end flex-row-reverse' : 'self-start'}`}>
+                    <div key={idx} className={`flex gap-2 sm:gap-3 max-w-[95%] sm:max-w-[80%] ${chat.role === 'user' ? 'self-end flex-row-reverse' : 'self-start'}`}>
                       <div className={`p-2 rounded-full h-8 w-8 flex items-center justify-center flex-shrink-0 ${
                         chat.role === 'user' ? 'bg-blue-600 text-white' : 'bg-slate-800 text-blue-400'
                       }`}>
@@ -1686,7 +1714,7 @@ export default function Dashboard() {
                         
                         {/* Dynamic copilot charts */}
                         {chat.chartData && chat.chartType === 'bar' && (
-                          <div className="w-80 h-44 mt-4 bg-slate-900/80 p-2 rounded border border-slate-700/30">
+                          <div className="w-full sm:w-80 max-w-full h-44 mt-4 bg-slate-900/80 p-2 rounded border border-slate-700/30">
                             <ResponsiveContainer width="100%" height="100%">
                               <BarChart data={chat.chartData}>
                                 <CartesianGrid strokeDasharray="3 3" stroke="#1E293B" />
@@ -1701,7 +1729,7 @@ export default function Dashboard() {
                         )}
 
                         {chat.chartData && chat.chartType === 'pie' && (
-                          <div className="w-80 h-44 mt-4 bg-slate-900/80 p-2 rounded border border-slate-700/30">
+                          <div className="w-full sm:w-80 max-w-full h-44 mt-4 bg-slate-900/80 p-2 rounded border border-slate-700/30">
                             <ResponsiveContainer width="100%" height="100%">
                               <PieChart>
                                 <Pie data={chat.chartData} dataKey="stock" nameKey="name" cx="50%" cy="50%" outerRadius={35} fill="#3B82F6" label>
@@ -1756,7 +1784,7 @@ export default function Dashboard() {
                 </div>
 
                 {/* Input form */}
-                <form onSubmit={handleAskCopilot} className="p-4 bg-slate-900 border-t border-slate-800 flex gap-3">
+                <form onSubmit={handleAskCopilot} className="p-3 sm:p-4 bg-slate-900 border-t border-slate-800 flex gap-2 sm:gap-3">
                   <input 
                     type="text" value={copilotQuestion} onChange={e => setCopilotQuestion(e.target.value)}
                     className="flex-1 bg-[#151D30] border border-slate-700 rounded-lg px-4 py-2.5 text-xs text-white focus:border-blue-500 outline-none"
@@ -1826,26 +1854,26 @@ export default function Dashboard() {
         </div>
 
         {/* BOTTOM UTILITY / EXPORTER BAR */}
-        <footer className="h-12 border-t border-[#1F2937] bg-[#111827] px-8 flex justify-between items-center text-xs">
-          <span className="text-slate-500">© 2026 SupplyChainX Platform. All systems operational.</span>
-          <div className="flex gap-4">
+        <footer className="min-h-[3rem] border-t border-[#1F2937] bg-[#111827] px-4 sm:px-8 py-2 flex flex-col sm:flex-row justify-between items-center gap-2 text-xs flex-shrink-0">
+          <span className="text-slate-500 text-center sm:text-left">© 2026 SupplyChainX Platform. All systems operational.</span>
+          <div className="flex flex-wrap justify-center sm:justify-end gap-3 sm:gap-4">
             <button 
               onClick={() => handleExport('INVENTORY', 'CSV')}
               className="flex items-center gap-1.5 text-slate-400 hover:text-white transition"
             >
-              <Download className="w-3.5 h-3.5" /> CSV Stock List
+              <Download className="w-3.5 h-3.5" /> <span className="hidden sm:inline">CSV</span> Stock List
             </button>
             <button 
               onClick={() => handleExport('RISK', 'PDF')}
               className="flex items-center gap-1.5 text-slate-400 hover:text-white transition"
             >
-              <FileText className="w-3.5 h-3.5" /> PDF Threat Assessment
+              <FileText className="w-3.5 h-3.5" /> <span className="hidden sm:inline">PDF</span> Threats
             </button>
             <button 
               onClick={() => handleExport('FORECAST', 'EXCEL')}
               className="flex items-center gap-1.5 text-slate-400 hover:text-white transition"
             >
-              <FileText className="w-3.5 h-3.5" /> Excel Demand Logs
+              <FileText className="w-3.5 h-3.5" /> <span className="hidden sm:inline">Excel</span> Demand
             </button>
           </div>
         </footer>
