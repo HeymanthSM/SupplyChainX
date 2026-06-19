@@ -70,6 +70,12 @@ async function main() {
   const p4 = await prisma.product.create({
     data: { name: 'Hydraulic Valve Unit', sku: 'HYDR-VALVE-04', category: 'Mechanical Components', price: 85.0, safetyStock: 100, reorderPoint: 200 },
   });
+  const p5 = await prisma.product.create({
+    data: { name: 'Brushless DC Motor', sku: 'BLDC-MOTOR-12', category: 'Mechanical Components', price: 95.0, safetyStock: 120, reorderPoint: 240 },
+  });
+  const p6 = await prisma.product.create({
+    data: { name: 'Carbon Fiber Composites', sku: 'CF-COMP-24', category: 'Raw Materials', price: 250.0, safetyStock: 50, reorderPoint: 100 },
+  });
 
   console.log('📦 Seeded products.');
 
@@ -81,6 +87,8 @@ async function main() {
       { productId: p2.id, warehouseId: wh2.id, quantity: 1200, batchNumber: 'SEMI-B45' }, // Overstock
       { productId: p3.id, warehouseId: wh2.id, quantity: 950, batchNumber: 'STL-B01' },
       { productId: p4.id, warehouseId: wh3.id, quantity: 210, batchNumber: 'HYD-B99' },
+      { productId: p5.id, warehouseId: wh1.id, quantity: 80, batchNumber: 'MOT-B12' },
+      { productId: p6.id, warehouseId: wh3.id, quantity: 150, batchNumber: 'CFB-B24' },
     ],
   });
 

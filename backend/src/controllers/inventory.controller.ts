@@ -16,6 +16,8 @@ const mockProducts = [
   { id: 'p-2', name: 'Semiconductor Microchip A9', sku: 'SEMI-CHIP-A9', category: 'Electronics', price: 45.0, safetyStock: 200, reorderPoint: 400 },
   { id: 'p-3', name: 'High-Tensile Steel Rods', sku: 'STEEL-ROD-HT', category: 'Raw Materials', price: 18.5, safetyStock: 500, reorderPoint: 1000 },
   { id: 'p-4', name: 'Hydraulic Valve Unit', sku: 'HYDR-VALVE-04', category: 'Mechanical Components', price: 85.0, safetyStock: 100, reorderPoint: 200 },
+  { id: 'p-5', name: 'Brushless DC Motor', sku: 'BLDC-MOTOR-12', category: 'Mechanical Components', price: 95.0, safetyStock: 120, reorderPoint: 240 },
+  { id: 'p-6', name: 'Carbon Fiber Composites', sku: 'CF-COMP-24', category: 'Raw Materials', price: 250.0, safetyStock: 50, reorderPoint: 100 },
 ];
 
 const mockInventory = [
@@ -24,6 +26,8 @@ const mockInventory = [
   { id: 'i-3', productId: 'p-2', product: mockProducts[1], warehouseId: 'wh-2', warehouse: mockWarehouses[1], quantity: 1200, batchNumber: 'SEMI-B45', expiryDate: null }, // Overstock!
   { id: 'i-4', productId: 'p-3', product: mockProducts[2], warehouseId: 'wh-2', warehouse: mockWarehouses[1], quantity: 950, batchNumber: 'STL-B01', expiryDate: null },
   { id: 'i-5', productId: 'p-4', product: mockProducts[3], warehouseId: 'wh-3', warehouse: mockWarehouses[2], quantity: 210, batchNumber: 'HYD-B99', expiryDate: '2027-06-30' },
+  { id: 'i-6', productId: 'p-5', product: mockProducts[4], warehouseId: 'wh-1', warehouse: mockWarehouses[0], quantity: 80, batchNumber: 'MOT-B12', expiryDate: null }, // Understock!
+  { id: 'i-7', productId: 'p-6', product: mockProducts[5], warehouseId: 'wh-3', warehouse: mockWarehouses[2], quantity: 150, batchNumber: 'CFB-B24', expiryDate: null },
 ];
 
 export const getInventory = async (req: Request, res: Response, next: NextFunction) => {
