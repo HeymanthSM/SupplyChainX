@@ -839,9 +839,12 @@ export default function Dashboard() {
                         className="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 text-white focus:border-blue-500 outline-none" required
                       >
                         <option value="">-- Choose Product --</option>
-                        {inventory.map(item => (
-                          <option key={item.productId} value={item.productId}>{item.product.name} ({item.product.sku})</option>
-                        ))}
+                        {inventory
+                          .filter((item, idx) => item?.product && item?.productId && inventory.findIndex(i => i.productId === item.productId) === idx)
+                          .map(item => (
+                            <option key={item.productId} value={item.productId}>{item.product.name} ({item.product.sku})</option>
+                          ))
+                        }
                       </select>
                     </div>
                     <div>
