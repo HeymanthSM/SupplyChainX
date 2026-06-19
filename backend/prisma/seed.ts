@@ -111,6 +111,32 @@ async function main() {
   console.log('🤝 Seeded suppliers.');
 
   // 7. Seed sample orders and shipments
+  const today = new Date();
+  const products = [p1, p2, p3, p4, p5, p6];
+  const suppliersList = [s1, s2, s3, s4];
+  const historicalOrdersData = [];
+
+  for (const prod of products) {
+    for (let i = 20; i > 0; i -= 2) {
+      const orderDate = new Date();
+      orderDate.setDate(today.getDate() - i);
+      const supplier = suppliersList[Math.floor(Math.random() * suppliersList.length)];
+      const qty = Math.floor(40 + Math.random() * 80);
+      historicalOrdersData.push({
+        supplierId: supplier.id,
+        productId: prod.id,
+        quantity: qty,
+        cost: qty * prod.price,
+        status: 'DELIVERED' as any,
+        orderDate: orderDate,
+      });
+    }
+  }
+
+  await prisma.order.createMany({
+    data: historicalOrdersData
+  });
+
   const order1 = await prisma.order.create({
     data: { supplierId: s3.id, productId: p1.id, quantity: 100, cost: 8500.0, status: 'PENDING' }
   });
@@ -131,6 +157,28 @@ async function main() {
   });
 
   console.log('🔍 Seeded traceability journey stages.');
+
+  // 9. Seed sample forecasts in the Forecast table for all products
+  const forecastDataList = [];
+  for (const prod of products) {
+    for (let i = 1; i <= 30; i++) {
+      const forecastDate = new Date();
+      forecastDate.setDate(today.getDate() + i);
+      forecastDataList.push({
+        productId: prod.id,
+        forecastDate: forecastDate,
+        forecastedDemand: Math.round(135 + Math.sin(i / 2) * 20 + Math.random() * 10),
+        forecastType: 'DAILY',
+        accuracy: 91.5
+      });
+    }
+  }
+
+  await prisma.forecast.createMany({
+    data: forecastDataList
+  });
+
+  console.log('📈 Seeded forecasts.');
   console.log('✅ Database seeding finished successfully.');
 }
 
